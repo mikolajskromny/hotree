@@ -1,0 +1,29 @@
+<h1>New event</h1>
+<br>
+<br>
+<div class="section-about">
+    <br>
+    <h2 class="header-about">About</h2>
+    <br>
+    <hr>
+    <br>
+    <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
+        <label>Title</label>
+        <div>
+            <input type="text" placeholder="Kind, short title" [(ngModel)]="eventInformation.title">
+        </div>
+    </div>
+    <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
+        <label>Description</label>
+        <div>
+            <textarea class="description" type="text" placeholder="Kind description" [(ngModel)]="eventInformation.description"></textarea>
+        </div>
+    </div>
+   <!-- <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
+        <label>Title</label>
+        <div>
+            <input type="text" placeholder="Kind, short title" [(ngModel)]="title">
+        </div>
+    </div>-->
+    <button (click)="showInputs()">ENTER</button>
+</div>
