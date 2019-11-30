@@ -1,29 +1,133 @@
 <h1>New event</h1>
 <br>
 <br>
-<div class="section-about">
+<form [formGroup]="eventForm" (ngSubmit)="showInputs()">
+  <div class="section-about">
     <br>
     <h2 class="header-about">About</h2>
     <br>
     <hr>
     <br>
-    <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
+    <!--            FIRST SECTION - ABOUT-->
+
+    <!--    TITLE-->
+    <div class="inputs" fxLayout="row">
+      <div class="label" fxFlex="20">
         <label>Title</label>
-        <div>
-            <input type="text" placeholder="Kind, short title" [(ngModel)]="eventInformation.title">
-        </div>
+      </div>
+      <div class="input" fxFlex="80">
+        <input type="text" placeholder="Kind, short title" name="title" formControlName="title">
+      </div>
     </div>
-    <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
-        <label>Description</label>
-        <div>
-            <textarea class="description" type="text" placeholder="Kind description" [(ngModel)]="eventInformation.description"></textarea>
+    <!--    DESCRIPTION-->
+    <div fxLayout="column" fxLayoutAlign=" none">
+      <div class="inputs" fxLayout="row">
+        <div class="label" fxFlex="20">
+          <label>Description</label>
         </div>
+        <div class="input" fxFlex="80">
+      <textarea [ngClass]="(f.description.value.length === maxLengthDescription) ? 'description-max' : 'description'"
+                type="text" placeholder="Kind description" name="description"
+                formControlName="description" [maxLength]="maxLengthDescription"></textarea>
+        </div>
+      </div>
+      <div
+        [ngClass]="(f.description.value.length === maxLengthDescription) ? 'error-max' : 'error'">
+        {{f.description.value.length + '/' + maxLengthDescription}}</div>
     </div>
-   <!-- <div class="inputs" fxLayout="row" fxLayoutAlign="space-between center">
-        <label>Title</label>
-        <div>
-            <input type="text" placeholder="Kind, short title" [(ngModel)]="title">
+
+    <!--    CATEGORY-->
+    <div class="inputs" fxLayout="row">
+      <div class="label" fxFlex="20">
+        <label>Category</label>
+      </div>
+      <div class="input" fxFlex="80">
+        <select formControlName="category_id" name="category_id">
+          <option hidden [ngValue]="'hint'" selected>Select one category</option>
+          <option *ngFor="let cat of categoryList" [ngValue]="cat.id">{{cat.name}}</option>
+        </select>
+      </div>
+    </div>
+    <!--    PAYMENT-->
+    <div class="inputs" fxLayout="row">
+      <div class="label" fxFlex="20">
+        <label>Payment</label>
+      </div>
+      <div class="input" fxFlex="80" fxLayout="row">
+        <label class="radio" fxFlex="35">
+          <input class="radio-button" type="radio" name="paid_event" formControlName="paid_event" [value]="false"
+                 (click)="clearFee()">
+          <span>Free event</span>
+        </label>
+        <label class="radio" fxFlex="35">
+          <input class="radio-button" type="radio" name="paid_event" formControlName="paid_event" [value]="true">
+          <span>Paid event</span>
+        </label>
+        <div class="input" fxFlex="30" *ngIf="eventForm.controls.paid_event.value">
+          <label class="hint-fee">
+            <input class="little-input" type="number" placeholder="Fee" name="event_fee" formControlName="event_fee">$
+          </label>
         </div>
-    </div>-->
-    <button (click)="showInputs()">ENTER</button>
-</div>
+      </div>
+    </div>
+    <!--    REWARD-->
+    <div class="inputs" fxLayout="row">
+      <div class="label" fxFlex="20">
+        <label>Reward</label>
+      </div>
+      <div class="input" fxFlex="80">
+        <label class="hint">
+          <input class="little-input" type="number" placeholder="Number" name="reward" formControlName="reward">number
+          of
+          points for participation
+        </label>
+      </div>
+    </div>
+    <!--              END FIRST SECTION-->
+
+
+  </div>
+  <div class="section-about">
+    <br>
+    <h2 class="header-about">Coordinator</h2>
+    <br>
+    <hr>
+    <br>
+    <!--              COORDINATOR-->
+    <!--    RESPONSIBLE-->
+    <div class="inputs" fxLayout="row">
+      <div class="label" fxFlex="20">
+        <label>Responsible</label>
+      </div>
+      <div class="input" fxFlex="80">
+        <select formControlName="responsible" name="responsible">
+          <optgroup label="Me">
+            <option *ngFor="let log of loggedEmploye" [ngValue]="log.id"> {{log.name + ' ' + log.lastname}}</option>
+          </optgroup>
+          <optgroup label="Others">
+            <option *ngFor="let emp of employeList" [ngValue]="emp.id"> {{emp.name + ' ' + emp.lastname}}</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <!--    EMAIL-->
+    <div fxLayout="column" fxLayoutAlign=" none">
+      <div class="inputs" fxLayout="row">
+        <div class="label" fxFlex="20">
+          <label>Email</label>
+        </div>
+        <div class="input" fxFlex="80">
+          <input [ngClass]="(f.email.errors) ? 'label-error' : 'label'"
+                 type="text" placeholder="Email" name="email" formControlName="email">
+        </div>
+      </div>
+      <div class="error-email">
+        <val-errors controlName="email">
+          <ng-template valError="required">The email is required</ng-template>
+          <ng-template valError="email">The email must be a valid email address</ng-template>
+        </val-errors>
+      </div>
+    </div>
+
+  </div>
+</form>
