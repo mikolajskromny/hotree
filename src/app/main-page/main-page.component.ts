@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {Categories} from '../model/categories';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Employes} from '../model/employes';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-main-page',
@@ -20,55 +21,76 @@ export class MainPageComponent implements OnInit, OnDestroy {
   public employeList: Array<Employes>;
   public loggedEmploye: Array<Employes>;
   public maxLengthDescription = 140;
-  eventForm: FormGroup;
+  public eventForm: FormGroup;
+  public actualDate: string;
+  public actualTime: string;
 
   constructor(private categoriesService: MockDataService,
               private formBuilder: FormBuilder) {
+    moment.locale('pl');
   }
 
   ngOnInit() {
     this.getCategories();
     this.getEmployes();
+    this.actualDate = moment().format('YYYY-MM-DD');
+    this.actualTime = moment().format('hh:mma');
     this.eventForm = this.formBuilder.group({
-        title: ['', Validators.required],
-        description: ['', Validators.required],
-        category_id: ['hint'],
-        paid_event: [''],
-        event_fee: ['', Validators.required],
-        start_on: ['', Validators.required],
-        responsible: [3, Validators.required],
-        reward: [null],
-        date: [''],
-        duration: [null],
-        email: ['', Validators.email],
-        id: ['']
-      }
-    );
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      category_id: [null],
+      paid_event: [true],
+      event_fee: [null, Validators.required],
+      reward: [null],
+      date: [this.actualDate],
+      time: [this.actualTime.slice(0, -2)],
+      ampm: [this.actualTime.slice(-2)],
+      duration: [null],
+      email: ['', Validators.email],
+      id: [3, Validators.required]
+    });
   }
 
-  get f() {
+  get eventFormControls() {
     return this.eventForm.controls;
   }
 
   showInputs() {
-    this.setEventInfo();
-    console.log(this.eventInformation);
+    if (!this.compareTime()) {
+      this.setEventInfo();
+      console.log(this.eventInformation);
+    } else {
+      alert('Niepoprawne dane!');                       // TODO: dorobic toastr do komunikatów
+    }
+  }
+
+  convertDateTime() {
+    this.actualTime = moment(this.eventFormControls.time.value + this.eventFormControls.ampm.value, 'hh:mma').format('HH:mm');
+  }
+
+  compareTime() {
+    if (this.actualDate >= this.eventFormControls.date.value) {
+      return (moment(this.eventFormControls.time.value + this.eventFormControls.ampm.value, 'hh:mma')
+        .isBefore(moment(this.actualTime, 'hh:mm a')));
+    } else {
+      return false;
+    }
   }
 
   setEventInfo() {
-    console.log(this.f);
+    this.convertDateTime();
     this.eventInformation = {
-      title: this.f.title.value,
-      description: this.f.description.value,
-      category_id: this.f.category_id.value,
-      paid_event: this.f.paid_event.value,
-      event_fee: this.f.event_fee.value,
-      reward: this.f.reward.value,
-      date: this.f.date.value,
-      duration: this.f.duration.value,
+      title: this.eventFormControls.title.value,
+      description: this.eventFormControls.description.value,
+      category_id: this.eventFormControls.category_id.value,
+      paid_event: this.eventFormControls.paid_event.value,
+      event_fee: this.eventFormControls.event_fee.value,
+      reward: this.eventFormControls.reward.value,
+      date: (this.eventFormControls.date.value + 'T' + this.actualTime),
+      duration: (this.eventFormControls.duration.value * 3600),
       coordinator: {
-        email: this.f.email.value,
-        id: this.f.id.value
+        email: this.eventFormControls.email.value,
+        id: this.eventFormControls.id.value
       }
     };
   }
@@ -83,12 +105,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.employesServiceSub = this.categoriesService.getEmployes().subscribe(employes => {
       this.loggedEmploye = (employes.filter(find => find.id === 3));
       this.employeList = employes.filter(filtered => filtered.id !== this.loggedEmploye[0].id);
-      this.eventForm.controls.responsible.setValue(this.loggedEmploye[0].id);
+      this.eventForm.controls.id.setValue(this.loggedEmploye[0].id);
     });
   }
 
   clearFee() {
-    this.f.event_fee.setValue(null);
+    this.eventFormControls.event_fee.setValue(null);
+    this.eventFormControls.event_fee.setErrors(null);
   }
 
 

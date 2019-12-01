@@ -1,14 +1,18 @@
-.section-about {
+.header-top {
+  background-color: #57ad9e;
+}
+
+.section {
   width: 60%;
   background-color: #f5f5f5;
   border-radius: 5px;
-  margin: 0 auto;
-  margin-bottom: 30px;
-  padding: 10px 30px 10px 10px;
+  margin: 0 auto 30px;
+  padding: 10px 30px 20px 10px;
 }
 
-.header-about {
+.header-section {
   padding-left: 10px;
+  margin: 20px 0px 20px 10px;
 }
 
 .inputs {
@@ -21,12 +25,7 @@
 
   &-max {
     @extend .description;
-    border-color: rgba(195, 195, 0, 0.72);
-
-    &:focus {
-      @extend .description-max;
-      box-shadow: 0 0 4px rgba(195, 195, 0, 0.72);
-    }
+    border-color: red;
   }
 }
 
@@ -39,12 +38,6 @@
   &-error {
     @extend .label;
     border-color: red;
-
-    &:focus {
-      @extend .label-error;
-      box-shadow: red;
-    }
-
   }
 }
 
@@ -54,9 +47,23 @@
   display: flex;
 }
 
+.error-input {
+  border-color: red;
+
+  &:focus {
+    @extend .error-input;
+    box-shadow: red;
+  }
+}
+
 .little-input {
   width: 20%;
   margin-right: 10px;
+
+  &-error {
+    @extend .little-input;
+    border-color: red;
+  }
 }
 
 .hint {
@@ -73,19 +80,45 @@
   font-size: 12px;
   color: rgb(117, 117, 117);
 
-  &-max {
+  &-alert {
     @extend .error;
     color: rgb(173, 173, 0);
   }
-  &-email {
+
+  &-warning {
     @extend .error;
     color: red;
   }
 }
 
+.label-date {
+  margin-right: 10px;
+}
+
+.section-button {
+  margin: -15px 0px 20px;
+  text-align: center;
+}
+
+.button {
+  background-color: #57ad9e;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
+//CUSTOM RADIO BUTTON
 $radioSize: 22px;
 $radioBorder: #D1D7E3;
-$radioActive: #82ada9;
+$radioActive: #57ad9e;
 
 .radio {
   display: block;
