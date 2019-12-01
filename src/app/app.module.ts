@@ -26,14 +26,15 @@ import {ToastrModule} from 'ngx-toastr';
         ReactiveFormsModule,
         ValdemortModule,
         ToastrModule.forRoot({
-                timeOut: 8000,
                 closeButton: true,
-                positionClass: 'toast-top-center',
+                positionClass: 'toast-top-right',
                 progressBar: true,
                 preventDuplicates: true,
                 resetTimeoutOnDuplicate: true,
                 messageClass: 'toastr',
-                titleClass: 'toastr'
+                titleClass: 'toastr',
+                extendedTimeOut: 3000,
+                timeOut: 3000
             }
         )
     ],

@@ -1,5 +1,6 @@
 .header-top {
   background-color: #57ad9e;
+  margin-bottom: 40px;
 }
 
 .section {
@@ -8,6 +9,10 @@
   border-radius: 5px;
   margin: 0 auto 30px;
   padding: 10px 30px 20px 10px;
+  &-success {
+    @extend .section;
+    width: 40%;
+  }
 }
 
 .header-section {
@@ -94,6 +99,10 @@
 .section-button {
   width: fit-content;
   margin: 0 auto 30px;
+  &-back {
+    @extend .section-button;
+    margin-bottom: 0;
+  }
 }
 
 .button {
@@ -111,6 +120,16 @@
   &:disabled {
     opacity: 0.6;
     color: rgba(255, 255, 255, 0.6);
+  }
+  &-back {
+    @extend .button;
+    border-radius: 20px;
+    padding: 10px 10px 10px 10px;
+    background-color: #f5f5f5;
+    border: solid #57ad9e;
+    width: 80px;
+    margin-top: 20px;
+    margin-bottom: 5px;
   }
 }
 
