@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~ngx-toastr/toastr';
+
 body {
   background-color: #e1e2e1;
   margin: 0 !important;
@@ -19,10 +20,11 @@ h2 {
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   font-size: 40px;
-  color: black;
+  color: #217d70;
   text-align: left;
   margin: 0 0 0 0;
 }
+
 
 label {
   font-family: 'Roboto', sans-serif;
@@ -34,8 +36,8 @@ input, textarea, select {
   background-color: #f5f5f5;
   border-style: solid;
   border-radius: 5px;
-  border-width: thin;
-  border-color: gray;
+  border-width: 2px;
+  border-color: #57ad9e;
   width: 100%;
   height: 35px;
   font-family: 'Roboto', sans-serif;
@@ -44,9 +46,15 @@ input, textarea, select {
   padding-left: 5px;
   padding-right: 5px;
   outline: none;
+
   &:focus {
     box-shadow: 0 0 4px #57ad9e;
   }
+}
+
+button:focus {
+  box-shadow: none;
+  outline: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -56,11 +64,7 @@ input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
-  -moz-appearance:textfield; /* Firefox */
-}
-
-body {
-  background-color: #e1e2e1;
+  -moz-appearance: textfield;
 }
 
 select::-ms-expand {
@@ -74,12 +78,11 @@ select {
 }
 
 option, optgroup {
-    background-color: #f5f5f5;
-    outline: none;
+  background-color: #f5f5f5;
+  outline: none;
 }
 
-button {
-  &:disabled {
-    opacity: 0.6;
-  }
+.toastr {
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
 }

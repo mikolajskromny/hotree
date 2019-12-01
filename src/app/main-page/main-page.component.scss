@@ -12,7 +12,7 @@
 
 .header-section {
   padding-left: 10px;
-  margin: 20px 0px 20px 10px;
+  margin: 20px 0 20px 10px;
 }
 
 .inputs {
@@ -49,11 +49,6 @@
 
 .error-input {
   border-color: red;
-
-  &:focus {
-    @extend .error-input;
-    box-shadow: red;
-  }
 }
 
 .little-input {
@@ -77,6 +72,7 @@
 .error {
   align-self: flex-end;
   font-family: 'Roboto', sans-serif;
+  font-style: italic;
   font-size: 12px;
   color: rgb(117, 117, 117);
 
@@ -96,12 +92,12 @@
 }
 
 .section-button {
-  margin: -15px 0px 20px;
-  text-align: center;
+  width: fit-content;
+  margin: 0 auto 30px;
 }
 
 .button {
-  background-color: #57ad9e;
+  background-color: #217d70;
   border: none;
   border-radius: 5px;
   color: white;
@@ -112,6 +108,29 @@
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  &:disabled {
+    opacity: 0.6;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+//TOOLTIP
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 5px 5px 5px;
+  margin: 5px 5px 5px 5px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 
 

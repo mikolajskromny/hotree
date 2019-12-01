@@ -8,23 +8,37 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MockDataService} from './_service/mock-data.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ValdemortModule} from 'ngx-valdemort';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainPageComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ValdemortModule
-  ],
-  providers: [MockDataService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        MainPageComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        FormsModule,
+        FlexLayoutModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ValdemortModule,
+        ToastrModule.forRoot({
+                timeOut: 8000,
+                closeButton: true,
+                positionClass: 'toast-top-center',
+                progressBar: true,
+                preventDuplicates: true,
+                resetTimeoutOnDuplicate: true,
+                messageClass: 'toastr',
+                titleClass: 'toastr'
+            }
+        )
+    ],
+    providers: [MockDataService],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

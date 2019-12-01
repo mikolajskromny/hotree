@@ -6,6 +6,7 @@ import {Categories} from '../model/categories';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Employes} from '../model/employes';
 import * as moment from 'moment';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-main-page',
@@ -24,9 +25,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
   public eventForm: FormGroup;
   public actualDate: string;
   public actualTime: string;
+  public tooltipText: string;
 
   constructor(private categoriesService: MockDataService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toastr: ToastrService) {
     moment.locale('pl');
   }
 
@@ -51,6 +54,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  getCategories() {
+    this.categoriesServiceSub = this.categoriesService.getCategories().subscribe(categories => {
+      this.categoryList = categories;
+    });
+  }
+
+  getEmployes() {
+    this.employesServiceSub = this.categoriesService.getEmployes().subscribe(employes => {
+      this.loggedEmploye = (employes.filter(find => find.id === 3));
+      this.employeList = employes.filter(filtered => filtered.id !== this.loggedEmploye[0].id);
+      this.eventForm.controls.id.setValue(this.loggedEmploye[0].id);
+    });
+  }
+
   get eventFormControls() {
     return this.eventForm.controls;
   }
@@ -59,8 +76,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
     if (!this.compareTime()) {
       this.setEventInfo();
       console.log(this.eventInformation);
+      this.toastr.success('Event added', 'Success!');
     } else {
-      alert('Niepoprawne dane!');                       // TODO: dorobic toastr do komunikatów
+      this.toastr.error('Niepoprawne dane!', 'Error!');
     }
   }
 
@@ -73,6 +91,19 @@ export class MainPageComponent implements OnInit, OnDestroy {
       return (moment(this.eventFormControls.time.value + this.eventFormControls.ampm.value, 'hh:mma')
         .isBefore(moment(this.actualTime, 'hh:mm a')));
     } else {
+      return false;
+    }
+  }
+
+  watchButtonDisabled() {
+    if (this.eventForm.invalid) {
+      this.tooltipText = 'You need to fill all mandatory fields or check email form';
+      return true;
+    } else if (this.compareTime()) {
+      this.tooltipText = 'Event cannot be earlier than now';
+      return true;
+    } else {
+      this.tooltipText = 'Everything looks fine, add the event!';
       return false;
     }
   }
@@ -95,19 +126,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     };
   }
 
-  getCategories() {
-    this.categoriesServiceSub = this.categoriesService.getCategories().subscribe(categories => {
-      this.categoryList = categories;
-    });
-  }
-
-  getEmployes() {
-    this.employesServiceSub = this.categoriesService.getEmployes().subscribe(employes => {
-      this.loggedEmploye = (employes.filter(find => find.id === 3));
-      this.employeList = employes.filter(filtered => filtered.id !== this.loggedEmploye[0].id);
-      this.eventForm.controls.id.setValue(this.loggedEmploye[0].id);
-    });
-  }
 
   clearFee() {
     this.eventFormControls.event_fee.setValue(null);
@@ -117,5 +135,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.categoriesServiceSub.unsubscribe();
+    this.employesServiceSub.unsubscribe();
   }
 }
