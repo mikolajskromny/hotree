@@ -146,7 +146,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     setFee() {      // added validator.required when set 'paid event'
         this.eventFormControls.event_fee.setValidators(Validators.required);
-        console.log(this.eventFormControls.event_fee);
     }
 
     changeTitle() {     // changing title, when we have form - title is 'Add event', when event added successfully - title is 'Success!'
