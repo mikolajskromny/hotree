@@ -15,7 +15,8 @@
                     </div>
                     <div class="input" fxFlex="80">
                         <input [ngClass]="(eventFormControls.title.errors) ? 'error-input' : ''" type="text"
-                               placeholder="Kind, short title" id="title" name="title" formControlName="title" (click)="clearFee()">
+                               placeholder="Kind, short title" id="title" name="title" formControlName="title"
+                               (click)="clearFee()">
                     </div>
                 </div>
                 <div class="error-warning">
@@ -31,10 +32,9 @@
                         <label for="description">Description</label>
                     </div>
                     <div class="input" fxFlex="80">
-      <textarea
-              [ngClass]="(eventFormControls.description.errors) ? 'description-max' : 'description'"
-              type="text" placeholder="Kind description" id="description" name="description"
-              formControlName="description" [maxLength]="maxLengthDescription"></textarea>
+                        <textarea [ngClass]="(eventFormControls.description.errors) ? 'description-max' : 'description'"
+                                  type="text" placeholder="Kind description" id="description" name="description"
+                                  formControlName="description" [maxLength]="maxLengthDescription"></textarea>
                     </div>
                 </div>
                 <div class="error-warning">
@@ -76,11 +76,14 @@
                             <span>Paid event</span>
                         </label>
                         <div class="input" fxFlex="30" *ngIf="eventForm.controls.paid_event.value">
-                            <label class="hint-fee">
-                                <input [ngClass]="(eventFormControls.event_fee.errors) ? 'little-input-error' : 'little-input'"
-                                       type="number"
-                                       placeholder="Fee" name="event_fee" formControlName="event_fee">$
-                            </label>
+                            <div fxLayout="column" fxLayoutAlign=" none">
+                                <label class="hint-fee">
+                                    <input [ngClass]="(eventFormControls.event_fee.errors) ? 'little-input-error' : 'little-input'"
+                                           type="number"
+                                           placeholder="Fee" name="event_fee" formControlName="event_fee">$
+                                </label>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,18 +91,30 @@
                     <val-errors controlName="event_fee">
                         <ng-template valError="required">You have to enter event fee</ng-template>
                     </val-errors>
+                    <div class="error-warning">
+                        <div *ngIf="(eventFormControls.event_fee.value < 1 && eventFormControls.event_fee.value != null)">
+                            For a paid event minimal price is $1
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--    REWARD-->
-            <div class="inputs" fxLayout="row">
-                <div class="label" fxFlex="20">
-                    <label>Reward</label>
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label>Reward</label>
+                    </div>
+                    <div class="input" fxFlex="80">
+                        <label class="hint">
+                            <input [ngClass]="(eventFormControls.reward.value == 0) ? 'little-input-error' : 'little-input'" type="number" placeholder="Number" name="reward"
+                                   formControlName="reward">number of points for participation
+                        </label>
+                    </div>
                 </div>
-                <div class="input" fxFlex="80">
-                    <label class="hint">
-                        <input class="little-input" type="number" placeholder="Number" name="reward"
-                               formControlName="reward">number of points for participation
-                    </label>
+                <div class="error-warning">
+                    <div *ngIf="(eventFormControls.reward.value < 0)">
+                        Can`t give negative points
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,8 +179,13 @@
                     </div>
                     <div class="input" fxFlex="20">
                         <label for="time" class="label-date">at</label>
-                        <input [ngClass]="compareTime() ? 'error-input' : ''" type="time" id="time"
-                               name="time" formControlName="time" [min]="actualTime.slice(0, -2)" [max]="'12:59'">
+
+
+                        <input [ngClass]="(compareTime() || checkIf12hFormat()) ? 'error-input' : ''"
+                               type="time" id="time"
+                               name="time" formControlName="time">
+
+
                     </div>
                     <div class="input" fxLayout="row" fxFlex="30">
                         <label class="radio" fxFlex="50">
@@ -178,22 +198,36 @@
                         </label>
                     </div>
                 </div>
-                <div [ngClass]="((actualDate > eventFormControls.date.value) || compareTime()) ? 'error-warning' : 'error'">
-                    <div *ngIf="(actualDate > eventFormControls.date.value) || compareTime()">
-                        Event can`t start earlier than actual date
+                <div fxLayout="column" fxLayoutAlign=" none">
+                    <div [ngClass]="((actualDate > eventFormControls.date.value) || compareTime()) ? 'error-warning' : 'error'">
+                        <div *ngIf="(actualDate > eventFormControls.date.value) || compareTime()">
+                            Event can`t start earlier than actual date
+                        </div>
+                    </div>
+                    <div class="error-warning">
+                        <div *ngIf="(checkIf12hFormat())">
+                            It`s a 12h format, please set proper time
+                        </div>
                     </div>
                 </div>
             </div>
             <!--                  DURATION-->
-            <div class="inputs" fxLayout="row">
-                <div class="label" fxFlex="20">
-                    <label for="duration">Duration</label>
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="duration">Duration</label>
+                    </div>
+                    <div class="input" fxFlex="20">
+                        <label class="hint-fee">
+                            <input [ngClass]="(eventFormControls.duration.value == 0) ? 'little-input-error' : 'little-input'" type="number" id="duration" name="duration"
+                                   formControlName="duration">hours
+                        </label>
+                    </div>
                 </div>
-                <div class="input" fxFlex="20">
-                    <label class="hint-fee">
-                        <input class="little-input" type="number" id="duration" name="duration"
-                               formControlName="duration">hours
-                    </label>
+                <div class="error-warning">
+                    <div *ngIf="(eventFormControls.duration.value === 0)">
+                        Duration must be at least 1h or leave empty
+                    </div>
                 </div>
             </div>
         </div>

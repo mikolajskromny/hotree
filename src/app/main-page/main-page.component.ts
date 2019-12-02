@@ -105,10 +105,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
         } else if (this.compareTime()) {
             this.tooltipText = 'Event cannot be earlier than now';
             return true;
+        } else if (this.checkIf12hFormat()) {
+            this.tooltipText = 'Check the time format';
+            return true;
         } else {
             this.tooltipText = 'Everything looks fine, add the event!';
             return false;
         }
+    }
+
+    checkIf12hFormat() {
+        return this.eventFormControls.time.value > '12:59' || this.eventFormControls.time.value < '01:00';
     }
 
     setEventInfo() {        // setting data to our universal interface
@@ -129,15 +136,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
         };
     }
 
-
     clearFee() {    // deletes validator.required and setting null value to event_fee when set 'free event'
-        this.eventFormControls.event_fee.clearValidators();
-        this.eventFormControls.event_fee.setErrors(null);
-        this.eventFormControls.event_fee.setValue(null);
+        if (this.eventFormControls.paid_event.value === false) {
+            this.eventFormControls.event_fee.clearValidators();
+            this.eventFormControls.event_fee.setErrors(null);
+            this.eventFormControls.event_fee.setValue(null);
+        }
     }
 
     setFee() {      // added validator.required when set 'paid event'
         this.eventFormControls.event_fee.setValidators(Validators.required);
+        console.log(this.eventFormControls.event_fee);
     }
 
     changeTitle() {     // changing title, when we have form - title is 'Add event', when event added successfully - title is 'Success!'
@@ -149,7 +158,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
             this.addingEvent = !this.addingEvent;
         }
     }
-
 
     ngOnDestroy() {
         this.categoriesServiceSub.unsubscribe();
