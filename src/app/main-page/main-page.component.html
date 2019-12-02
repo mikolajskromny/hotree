@@ -199,6 +199,16 @@
                     </div>
                 </div>
                 <div fxLayout="column" fxLayoutAlign=" none">
+                  <div class="error-warning">
+                    <val-errors controlName="date">
+                      <ng-template valError="required">Date must be set up</ng-template>
+                    </val-errors>
+                  </div>
+                  <div class="error-warning">
+                    <val-errors controlName="time">
+                      <ng-template valError="required">Time must be set up</ng-template>
+                    </val-errors>
+                  </div>
                     <div [ngClass]="((actualDate > eventFormControls.date.value) || compareTime()) ? 'error-warning' : 'error'">
                         <div *ngIf="(actualDate > eventFormControls.date.value) || compareTime()">
                             Event can`t start earlier than actual date
