@@ -1,0 +1,252 @@
+<div class="header-top">
+    <h1>{{title}}</h1>
+</div>
+<div *ngIf="addingEvent">
+    <form [formGroup]="eventForm">
+        <div class="section">
+            <h2 class="header-section">About</h2>
+            <hr>
+            <!--            FIRST SECTION - ABOUT-->
+            <!--    TITLE-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="title">Title</label>
+                    </div>
+                    <div class="input" fxFlex="80">
+                        <input [ngClass]="(eventFormControls.title.errors) ? 'error-input' : ''" type="text"
+                               placeholder="Kind, short title" id="title" name="title" formControlName="title"
+                               (click)="clearFee()">
+                    </div>
+                </div>
+                <div class="error-warning">
+                    <val-errors controlName="title">
+                        <ng-template valError="required">You can`t leave title empty</ng-template>
+                    </val-errors>
+                </div>
+            </div>
+            <!--    DESCRIPTION-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="input" fxFlex="80">
+                        <textarea [ngClass]="(eventFormControls.description.errors) ? 'description-max' : 'description'"
+                                  type="text" placeholder="Kind description" id="description" name="description"
+                                  formControlName="description" [maxLength]="maxLengthDescription"></textarea>
+                    </div>
+                </div>
+                <div class="error-warning">
+                    <val-errors controlName="description">
+                        <ng-template valError="required">You have to describe your event</ng-template>
+                    </val-errors>
+                </div>
+                <div [ngClass]="(eventFormControls.description.value.length === maxLengthDescription) ? 'error-alert' : 'error'">
+                    {{eventFormControls.description.value.length + '/' + maxLengthDescription}}</div>
+            </div>
+
+            <!--    CATEGORY-->
+            <div class="inputs" fxLayout="row">
+                <div class="label" fxFlex="20">
+                    <label for="category_id">Category</label>
+                </div>
+                <div class="input" fxFlex="80">
+                    <select formControlName="category_id" id="category_id" name="category_id">
+                        <option hidden [ngValue]="null" selected>Select one category</option>
+                        <option *ngFor="let cat of categoryList" [ngValue]="cat.id">{{cat.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <!--    PAYMENT-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label>Payment</label>
+                    </div>
+                    <div class="input" fxFlex="80" fxLayout="row">
+                        <label class="radio" fxFlex="35">
+                            <input class="radio-button" type="radio" name="paid_event" formControlName="paid_event"
+                                   [value]="false" (click)="clearFee()">
+                            <span>Free event</span>
+                        </label>
+                        <label class="radio" fxFlex="35">
+                            <input class="radio-button" type="radio" name="paid_event" formControlName="paid_event"
+                                   [value]="true" (click)="setFee()">
+                            <span>Paid event</span>
+                        </label>
+                        <div class="input" fxFlex="30" *ngIf="eventForm.controls.paid_event.value">
+                            <div fxLayout="column" fxLayoutAlign=" none">
+                                <label class="hint-fee">
+                                    <input [ngClass]="(eventFormControls.event_fee.errors) ? 'little-input-error' : 'little-input'"
+                                           type="number"
+                                           placeholder="Fee" name="event_fee" formControlName="event_fee">$
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="error-warning" *ngIf="eventForm.controls.paid_event.value">
+                    <val-errors controlName="event_fee">
+                        <ng-template valError="required">You have to enter event fee</ng-template>
+                    </val-errors>
+                    <div class="error-warning">
+                        <div *ngIf="(eventFormControls.event_fee.value < 1 && eventFormControls.event_fee.value != null)">
+                            For a paid event minimal price is $1
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--    REWARD-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label>Reward</label>
+                    </div>
+                    <div class="input" fxFlex="80">
+                        <label class="hint">
+                            <input [ngClass]="(eventFormControls.reward.value == 0) ? 'little-input-error' : 'little-input'" type="number" placeholder="Number" name="reward"
+                                   formControlName="reward">number of points for participation
+                        </label>
+                    </div>
+                </div>
+                <div class="error-warning">
+                    <div *ngIf="(eventFormControls.reward.value < 0)">
+                        Can`t give negative points
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--              END FIRST SECTION-->
+
+        <!--            SECOND SECTION - COORDINATOR-->
+        <div class="section">
+            <h2 class="header-section">Coordinator</h2>
+            <hr>
+            <!--    RESPONSIBLE-->
+            <div class="inputs" fxLayout="row">
+                <div class="label" fxFlex="20">
+                    <label for="responsible">Responsible</label>
+                </div>
+                <div class="input" fxFlex="80">
+                    <select formControlName="id" name="id" id="responsible">
+                        <optgroup label="Me">
+                            <option *ngFor="let log of loggedEmploye"
+                                    [ngValue]="log.id"> {{log.name + ' ' + log.lastname}}</option>
+                        </optgroup>
+                        <optgroup label="Others">
+                            <option *ngFor="let emp of employeList"
+                                    [ngValue]="emp.id"> {{emp.name + ' ' + emp.lastname}}</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <!--    EMAIL-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input" fxFlex="80">
+                        <input [ngClass]="(eventFormControls.email.errors) ? 'error-input' : ''"
+                               type="text" placeholder="Email" id="email" name="email" formControlName="email">
+                    </div>
+                </div>
+                <div class="error-warning">
+                    <val-errors controlName="email">
+                        <ng-template valError="email">The email must be a valid email address</ng-template>
+                    </val-errors>
+                </div>
+            </div>
+        </div>
+        <!--              END SECOND SECTION-->
+
+        <!--            THIRD SECTION - WHEN-->
+        <div class="section">
+            <h2 class="header-section">When</h2>
+            <hr>
+            <!--    STARTS ON-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="date">Starts on</label>
+                    </div>
+                    <div class="input" fxFlex="27">
+                        <input [ngClass]="(actualDate > eventFormControls.date.value) ? 'error-input' : ''" type="date"
+                               id="date"
+                               name="date" formControlName="date" [min]="actualDate">
+                    </div>
+                    <div class="input" fxFlex="20">
+                        <label for="time" class="label-date">at</label>
+
+
+                        <input [ngClass]="(compareTime() || checkIf12hFormat()) ? 'error-input' : ''"
+                               type="time" id="time"
+                               name="time" formControlName="time">
+
+
+                    </div>
+                    <div class="input" fxLayout="row" fxFlex="30">
+                        <label class="radio" fxFlex="50">
+                            <input class="radio-button" type="radio" name="ampm" formControlName="ampm" [value]="'am'">
+                            <span>A.M.</span>
+                        </label>
+                        <label class="radio" fxFlex="50">
+                            <input class="radio-button" type="radio" name="ampm" formControlName="ampm" [value]="'pm'">
+                            <span>P.M.</span>
+                        </label>
+                    </div>
+                </div>
+                <div fxLayout="column" fxLayoutAlign=" none">
+                    <div [ngClass]="((actualDate > eventFormControls.date.value) || compareTime()) ? 'error-warning' : 'error'">
+                        <div *ngIf="(actualDate > eventFormControls.date.value) || compareTime()">
+                            Event can`t start earlier than actual date
+                        </div>
+                    </div>
+                    <div class="error-warning">
+                        <div *ngIf="(checkIf12hFormat())">
+                            It`s a 12h format, please set proper time
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--                  DURATION-->
+            <div fxLayout="column" fxLayoutAlign=" none">
+                <div class="inputs" fxLayout="row">
+                    <div class="label" fxFlex="20">
+                        <label for="duration">Duration</label>
+                    </div>
+                    <div class="input" fxFlex="20">
+                        <label class="hint-fee">
+                            <input [ngClass]="(eventFormControls.duration.value == 0) ? 'little-input-error' : 'little-input'" type="number" id="duration" name="duration"
+                                   formControlName="duration">hours
+                        </label>
+                    </div>
+                </div>
+                <div class="error-warning">
+                    <div *ngIf="(eventFormControls.duration.value === 0)">
+                        Duration must be at least 1h or leave empty
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--          END OF SECTION THREE-->
+        <!--        SECTION BUTTON-->
+        <div class="section-button tooltip">
+            <button class="button" (click)="addEvent(); changeTitle()" [disabled]="watchButtonDisabled()">ADD</button>
+            <span class="tooltiptext" id="tooltiptext"
+                  [ngStyle]="(watchButtonDisabled() === true ? {'background-color': 'red', 'border-color': 'transparent red transparent transparent;'} : {'background-color': 'green'})">{{tooltipText}}</span>
+        </div>
+    </form>
+</div>
+<div *ngIf="!addingEvent">
+    <div class="section-success" fxLayout="column" fxLayoutAlign=" none">
+        <h2 class="success">You successfully added an event!</h2>
+        <div class="section-button-back">
+            <button class="button-back" (click)="changeTitle()">
+                <img src="../../assets/custom_icons/arrow_back-24px.svg" alt="back">
+            </button>
+        </div>
+    </div>
+</div>

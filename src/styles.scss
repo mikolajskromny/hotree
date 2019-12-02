@@ -1,1 +1,92 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~ngx-toastr/toastr';
+
+body {
+  background-color: #e1e2e1;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-size: 80px;
+  color: white;
+  text-align: center;
+  margin: 0 0 0 0;
+  border-radius: 5px;
+}
+
+h2 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-size: 40px;
+  color: #217d70;
+  text-align: left;
+  margin: 0 0 0 0;
+  &.success {
+    @extend h2;
+    text-align: center;
+  }
+}
+
+
+label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  color: gray;
+}
+
+input, textarea, select {
+  background-color: #f5f5f5;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: #57ad9e;
+  width: 100%;
+  height: 35px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 17px;
+  color: #333333;
+  padding-left: 5px;
+  padding-right: 5px;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 4px #57ad9e;
+  }
+}
+
+button:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+select::-ms-expand {
+  display: none; /* remove default arrow on ie10 and ie11 */
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url("../src/assets/custom_icons/keyboard_arrow_down-24px.svg") 99% / 20px no-repeat;
+}
+
+option, optgroup {
+  background-color: #f5f5f5;
+  outline: none;
+}
+
+.toastr {
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
+}

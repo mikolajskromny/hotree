@@ -1,27 +1,50 @@
 # Hotree
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.19.
+## Description
 
-## Development server
+This is a simple app with form for adding events. You have to fill
+`title`, `description`, `coordinator` and if event is paid `event fee`.
+Rest of is voluntary. I implemented validation of each field, for example: 
+`email` is not required but it have to have right form. 
+`title` is mandatory and it is impossible to add event without `title`.
+Event date is divided for `date` and `time`. 
+You can't set up earlier date than actual date and setting time is in 12h format.
+If the is added correctly the appropriate message will be displayed. 
+Event details will be displayed in browser console (to open browser console press `F12`).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Configuration
 
-## Code scaffolding
+- Download the node.js installer for Windows and install it - [NodeJS](https://nodejs.org/en/download/)
+  
+- Install TypeScript
+```shell
+npm install -g typescript
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Install Angular
+```shell
+npm install -g @angular/cli
+```
 
-## Build
+- Install [git](https://git-for-windows.github.io/) and follow this [instructions](https://www.atlassian.com/git/tutorials/install-git#windows)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- Clone repository to your computer
+```shell
+git clone https://github.com/mikolajskromny/hotree.git
+```
 
-## Running unit tests
+## Running the application
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Open CMD in repository directory and type:
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+    - Install all modules
+    ```shel
+    npm install
+    ```
+  
+    - Run the app
+    ```shell
+    ng serve -o
+    ```
+  
+    - App will open automatically in default browser on [http://localhost:4200/](http://localhost:4200/) 
